@@ -1,9 +1,24 @@
-let express = require('express');
-let index = require('./routes/index');
+const express = require('express');
+const index = require('./routes/index');
 const bodyParser = require('body-parser');
+const path = require('path');
 
-let hostname = 'localhost'; 
+const Session = require('express-session');
+const FileStore = require('session-file-store')(Session);
+
 let app = express(); 
+
+
+app.use(Session({
+  store: new FileStore({
+      path: path.join(__dirname, '/tmp'),
+      encrypt: true
+  }),
+  secret: 'Super Secret !',
+  resave: true,
+  saveUninitialized: true,
+  name : 'sessionId'
+}));
 
 app.use('/', index);
 
